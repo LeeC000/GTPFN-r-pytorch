@@ -70,7 +70,7 @@ train_loader, train_target_tensor, val_loader, val_target_tensor, test_loader, t
 )
 # adj_mx, distance_mx = get_adjacent_matrix(adj_filename, num_of_vertices, id_filename)
 
-net = model.My_model(heads_num, hidden_channels, len_input, num_for_predict, num_of_days, num_of_weeks, 8, DEVICE)
+net = GTPFN.My_model(heads_num, hidden_channels, len_input, num_for_predict, num_of_days, num_of_weeks, 8, DEVICE)
 net = net.to(DEVICE)
 
 def adjust_learning_rate(optimizer, new_learning_rate):
