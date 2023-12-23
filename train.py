@@ -9,7 +9,7 @@ from time import time
 import shutil
 import argparse
 import configparser
-import model
+import GTPFN
 from lib.utils import load_graphdata_channel1, compute_val_loss_mstgcn, predict_and_save_results_mstgcn
 from torch.utils.tensorboard import SummaryWriter
 from lib.metrics import masked_mape_np,  masked_mae,masked_mse,masked_rmse
