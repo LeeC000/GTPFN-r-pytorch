@@ -57,33 +57,12 @@ time_strides = num_of_hours
 loss_function = training_config['loss_function']
 metric_method = training_config['metric_method']
 missing_value = float(training_config['missing_value'])
-# adj_filename = "./data/PEMS04/PEMS04.csv"
-# graph_signal_matrix_filename = "./data/PEMS04/PEMS04.npz"
-# num_of_vertices = 307
-# points_per_hour = 12
-# num_for_predict = 12
-# len_input = 12
-# dataset_name = "PEMS04"
-# ctx = 0
-# in_channels = 1
-# hidden_channels = 32
-# batch_size = 64
-# model_name = "My"
-# dataset_name = "PEMS04"
-# num_of_weeks = 2
-# num_of_days = 2
-# num_of_hours = 1
-# start_epoch = 0
-# epochs = 128
-# learning_rate = 0.1
-# loss_function = "mse"
-# metric_method = "unmask"
-# missing_value=0.0
-# time_strides = num_of_hours
+heads_num = int(training_config['heads_num'])
+
 
 folder_dir ='%s_h%dd%dw%d_channel%d_%e' %(missing_value,num_of_hours,num_of_days,num_of_weeks,in_channels,learning_rate)
 print('folder_dir:', folder_dir)
-params_path = os.path.join('autodl-tmp/My/experiments', dataset_name, folder_dir)
+params_path = os.path.join('./experiments', dataset_name, folder_dir)
 print('params_path:', params_path)
 
 train_loader, train_target_tensor, val_loader, val_target_tensor, test_loader, test_target_tensor, _mean, _std = load_graphdata_channel1(
@@ -91,7 +70,7 @@ train_loader, train_target_tensor, val_loader, val_target_tensor, test_loader, t
 )
 # adj_mx, distance_mx = get_adjacent_matrix(adj_filename, num_of_vertices, id_filename)
 
-net = model.My_model(8, hidden_channels, len_input, num_for_predict, num_of_days, num_of_weeks, 8, DEVICE)
+net = model.My_model(heads_num, hidden_channels, len_input, num_for_predict, num_of_days, num_of_weeks, 8, DEVICE)
 net = net.to(DEVICE)
 
 def adjust_learning_rate(optimizer, new_learning_rate):
@@ -99,8 +78,6 @@ def adjust_learning_rate(optimizer, new_learning_rate):
         param_group['lr'] = new_learning_rate
 
 def train_main():
-    # predict_main(291, test_loader, test_target_tensor,metric_method ,_mean, _std, DEVICE, 'test')
-    # return
     if (start_epoch == 0) and (not os.path.exists(params_path)):
         os.makedirs(params_path)
         print('create params directory %s' % (params_path))
@@ -138,7 +115,7 @@ def train_main():
     elif loss_function == 'rmse':
         criterion = nn.MSELoss().to(DEVICE)
         masked_flag= 0
-    optimizer = optim.Adam(net.parameters(), lr=0.01, weight_decay=0.0001)
+    optimizer = optim.Adam(net.parameters(), lr=learning_rate, weight_decay=0.0001)
     sw = SummaryWriter(log_dir=params_path, flush_secs=5)
     print(net)
 
@@ -158,9 +135,6 @@ def train_main():
     best_val_loss = np.inf
 
     start_time = time()
-
-    # predict_main(283, test_loader, test_target_tensor,metric_method ,_mean, _std, DEVICE, 'test')
-    # return
 
     if start_epoch > 0:
 
