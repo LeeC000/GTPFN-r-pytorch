@@ -16,7 +16,7 @@ from lib.metrics import masked_mape_np,  masked_mae,masked_mse,masked_rmse
 
 
 argparser = argparse.ArgumentParser()
-argparser.add_argument('--config', default='autodl-tmp/My/configurations/PEMS04_astgcn.conf', type=str)
+argparser.add_argument('--config', default='./configurations/PEMS04.conf', type=str)
 args = argparser.parse_args()
 config = configparser.ConfigParser()
 print('read configuration file : %s' %(args.config))
