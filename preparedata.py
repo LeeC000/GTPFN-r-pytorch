@@ -256,7 +256,7 @@ def read_and_generate_dataset(graph_signal_matrix_filename,
     if save:
         file = os.path.basename(graph_signal_matrix_filename).split('.')[0]
         dirpath = os.path.dirname(graph_signal_matrix_filename)
-        filename = os.path.join(dirpath, file + '_r' + str(num_of_hours) + '_d' + str(num_of_days) + '_w' + str(num_of_weeks)) + '_astcgn'
+        filename = os.path.join(dirpath, file + '_r' + str(num_of_hours) + '_d' + str(num_of_days) + '_w' + str(num_of_weeks)) 
         np.savez_compressed(filename,
                             train_x_r=all_data['train']['x_r'], train_x_d=all_data['train']['x_d'],
                             train_x_w=all_data['train']['x_w'], train_target=all_data['train']['target'],
