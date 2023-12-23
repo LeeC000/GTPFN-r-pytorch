@@ -326,7 +326,7 @@ def normalization(train, val, test):
 
 # prepare data set
 parser = argparse.ArgumentParser()
-parser.add_argument('--config',default='autodl-tmp/My/configurations/PEMS04_astgcn.conf',type=str,help='path of dataset')
+parser.add_argument('--config',default='./configurations/PEMS04.conf',type=str,help='path of dataset')
 args = parser.parse_args()
 config_parser = configparser.ConfigParser()
 print('read configurations from %s' %(args.config))
