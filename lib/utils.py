@@ -108,7 +108,6 @@ def load_graphdata_channel1(graph_signal_matrix_filename, num_of_hours, num_of_d
     每个样本同时包含所有监测点的数据，所以本函数构造的数据输入时空序列预测模型；
     该函数会把hour, day, week的时间串起来；
     注： 从文件读入的数据，x是最大最小归一化的，但是y是真实值
-    这个函数转为mstgcn，astgcn设计，返回的数据x都是通过减均值除方差进行归一化的，y都是真实值
     :param graph_signal_matrix_filename: str
     :param num_of_hours: int
     :param num_of_days: int
@@ -129,7 +128,7 @@ def load_graphdata_channel1(graph_signal_matrix_filename, num_of_hours, num_of_d
     dirpath = os.path.dirname(graph_signal_matrix_filename)
 
     filename = os.path.join(dirpath,
-                            file + '_r' + str(num_of_hours) + '_d' + str(num_of_days) + '_w' + str(num_of_weeks)) +'_astcgn'
+                            file + '_r' + str(num_of_hours) + '_d' + str(num_of_days) + '_w' + str(num_of_weeks))
 
     print('load file:', filename)
 
@@ -251,58 +250,6 @@ def compute_val_loss_mstgcn(net, val_loader, criterion,  masked_flag,missing_val
         sw.add_scalar('validation_loss', validation_loss, epoch)
     return validation_loss
 
-
-# def evaluate_on_test_mstgcn(net, test_loader, test_target_tensor, sw, epoch, _mean, _std):
-#     '''
-#     for rnn, compute MAE, RMSE, MAPE scores of the prediction for every time step on testing set.
-#
-#     :param net: model
-#     :param test_loader: torch.utils.data.utils.DataLoader
-#     :param test_target_tensor: torch.tensor (B, N_nodes, T_output, out_feature)=(B, N_nodes, T_output, 1)
-#     :param sw:
-#     :param epoch: int, current epoch
-#     :param _mean: (1, 1, 3(features), 1)
-#     :param _std: (1, 1, 3(features), 1)
-#     '''
-#
-#     net.train(False)  # ensure dropout layers are in test mode
-#
-#     with torch.no_grad():
-#
-#         test_loader_length = len(test_loader)
-#
-#         test_target_tensor = test_target_tensor.cpu().numpy()
-#
-#         prediction = []  # 存储所有batch的output
-#
-#         for batch_index, batch_data in enumerate(test_loader):
-#
-#             encoder_inputs, labels = batch_data
-#
-#             outputs = net(encoder_inputs)
-#
-#             prediction.append(outputs.detach().cpu().numpy())
-#
-#             if batch_index % 100 == 0:
-#                 print('predicting testing set batch %s / %s' % (batch_index + 1, test_loader_length))
-#
-#         prediction = np.concatenate(prediction, 0)  # (batch, T', 1)
-#         prediction_length = prediction.shape[2]
-#
-#         for i in range(prediction_length):
-#             assert test_target_tensor.shape[0] == prediction.shape[0]
-#             print('current epoch: %s, predict %s points' % (epoch, i))
-#             mae = mean_absolute_error(test_target_tensor[:, :, i], prediction[:, :, i])
-#             rmse = mean_squared_error(test_target_tensor[:, :, i], prediction[:, :, i]) ** 0.5
-#             mape = masked_mape_np(test_target_tensor[:, :, i], prediction[:, :, i], 0)
-#             print('MAE: %.2f' % (mae))
-#             print('RMSE: %.2f' % (rmse))
-#             print('MAPE: %.2f' % (mape))
-#             print()
-#             if sw:
-#                 sw.add_scalar('MAE_%s_points' % (i), mae, epoch)
-#                 sw.add_scalar('RMSE_%s_points' % (i), rmse, epoch)
-#                 sw.add_scalar('MAPE_%s_points' % (i), mape, epoch)
 
 
 def predict_and_save_results_mstgcn(net, data_loader, data_target_tensor, global_step, metric_method,_mean, _std, params_path, device, type):
